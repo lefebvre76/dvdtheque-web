@@ -112,7 +112,7 @@
                                         "type": "string",
                                         "example": "password2"
                                     },
-                                    "new_password_confirm": {
+                                    "new_password_confirmation": {
                                         "type": "string",
                                         "example": "password2"
                                     }
@@ -143,10 +143,110 @@
                     }
                 ]
             }
+        },
+        "/boxes": {
+            "post": {
+                "tags": [
+                    "Boxes"
+                ],
+                "operationId": "d86184063a3a87db8ccf49c9025ac1d2",
+                "requestBody": {
+                    "description": "The Token Request",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "bar_code": {
+                                        "type": "string",
+                                        "example": "3512392506697"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Get box informations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Box"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Box not found"
+                    },
+                    "422": {
+                        "description": "Bad informations"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
+            "Box": {
+                "title": "Box",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "original_title": {
+                        "type": "string"
+                    },
+                    "year": {
+                        "type": "integer"
+                    },
+                    "synopsis": {
+                        "type": "string"
+                    },
+                    "edition": {
+                        "type": "string"
+                    },
+                    "editor": {
+                        "type": "string"
+                    },
+                    "boxes": {
+                        "type": "array",
+                        "items": {
+                            "description": "Box Object",
+                            "type": "object"
+                        }
+                    },
+                    "illustration": {
+                        "$ref": "#/components/schemas/Illustration"
+                    }
+                },
+                "type": "object"
+            },
+            "Illustration": {
+                "title": "Illustration",
+                "properties": {
+                    "original": {
+                        "type": "string"
+                    },
+                    "thumbnail": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "title": "User",
                 "properties": {

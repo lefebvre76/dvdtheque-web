@@ -9,5 +9,6 @@ L'application utilise la version 10 de Laravel. Un version dockerisée à partir
 cp .env.example .env
 composer install
 ./vendor/bin/sail artisan migrate:fresh --seed 
+./vendor/bin/sail artisan storage:link
 ```
 puis aller sur la page [http://localhost/](http://localhost/)
