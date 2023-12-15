@@ -168,7 +168,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Get box informations",
                         "content": {
                             "application/json": {
@@ -180,6 +180,120 @@
                     },
                     "404": {
                         "description": "Box not found"
+                    },
+                    "422": {
+                        "description": "Bad informations"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/boxes/{id}": {
+            "get": {
+                "tags": [
+                    "Boxes"
+                ],
+                "operationId": "5b5e0e131877a6bbaeadbafe3bf5870d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get box informations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Box"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Box not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/me/boxes": {
+            "get": {
+                "tags": [
+                    "Boxes"
+                ],
+                "operationId": "eb4eeac0a1a05dba773da6791b2350c7",
+                "parameters": [
+                    {
+                        "name": "wishlist",
+                        "in": "query",
+                        "example": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get boxes associated to auth user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/LightBox"
+                                            }
+                                        },
+                                        "links": {
+                                            "properties": {
+                                                "first": {
+                                                    "type": "string"
+                                                },
+                                                "last": {
+                                                    "type": "string"
+                                                },
+                                                "prev": {
+                                                    "type": "string"
+                                                },
+                                                "next": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "to": {
+                                                    "type": "integer"
+                                                },
+                                                "total": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "422": {
                         "description": "Bad informations"
@@ -324,6 +438,24 @@
                     },
                     "thumbnail": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "LightBox": {
+                "title": "LightBox",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "illustration": {
+                        "$ref": "#/components/schemas/Illustration"
                     }
                 },
                 "type": "object"

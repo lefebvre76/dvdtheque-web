@@ -22,5 +22,28 @@ use App\Http\Controllers\Controller;
  */
 class ApiController extends Controller
 {
+    public function returnSuccess($response = null)
+    {
+        return $this->returnResponse($response);
+    }
 
+    public function returnNotFound($response = null)
+    {
+        return $this->returnResponse($response, 404);
+    }
+
+    public function returnNoContent($response = null)
+    {
+        return $this->returnResponse($response, 204);
+    }
+
+    public function returnCreated($response = null)
+    {
+        return $this->returnResponse($response, 201);
+    }
+
+    public function returnResponse($response = null, $status = 200) 
+    {
+        return response($response, $status);
+    }
 }

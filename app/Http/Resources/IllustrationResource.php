@@ -7,6 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class IllustrationResource extends JsonResource
 {
+    public static $wrap = null;
+
     /**
      * @OA\Schema(
      *      schema="Illustration",

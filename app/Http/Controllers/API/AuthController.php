@@ -47,7 +47,7 @@ class AuthController extends ApiController
 
         $user = User::where('email', $request['email'])->firstOrFail();
         $token = $user->createToken('auth_token')->plainTextToken;
-        return response()->json([
+        return $this->returnSuccess([
             'token' => $token,
         ]);
     }
@@ -67,7 +67,7 @@ class AuthController extends ApiController
      */
     public function me(Request $request)
     {
-        return new UserResource($request->user());
+        return $this->returnSuccess(new UserResource(Auth::user()));
     }
 
 
@@ -106,6 +106,6 @@ class AuthController extends ApiController
                 'password' => Hash::make($request->new_password)
             ]);
         }
-        return new UserResource($request->user());
+        return $this->returnSuccess(new UserResource(Auth::user()));
     }
 }

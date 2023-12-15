@@ -9,6 +9,7 @@ use App\Models\Box;
 use App\Http\Requests\UpdateUser;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\BoxResource;
+use App\Http\Resources\LightBoxResource;
 use Illuminate\Support\Facades\Hash;
 use App\Services\Dvdfr;
 
@@ -27,7 +28,7 @@ class BoxController extends ApiController
      *          )
      *     ),
      *      @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Get box informations",
      *         @OA\JsonContent(ref="#/components/schemas/Box")
      *     ),
@@ -41,7 +42,61 @@ class BoxController extends ApiController
         if (!$box) {
             $box = Dvdfr::store($request->bar_code);
         }
-        return new BoxResource($box);
+        return $this->returnSuccess(new BoxResource($box));
+    }
+
+    /**
+     * @OA\Get(
+     *     tags={"Boxes"},
+     *     path="/boxes/{id}",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(in="path", name="id"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Get box informations",
+     *         @OA\JsonContent(ref="#/components/schemas/Box")
+     *     ),
+     *     @OA\Response(response=404, description="Box not found"),
+     * )
+     */
+    public function show(Box $box)
+    {
+        return $this->returnSuccess(new BoxResource($box));
+    }
+
+    /**
+     * @OA\Get(
+     *     tags={"Boxes"},
+     *     path="/me/boxes",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(in="query", name="wishlist", example=false),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Get boxes associated to auth user",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/LightBox")),
+     *              @OA\Property(property="links", type="object", 
+     *                  @OA\Property(property="first", type="string"),
+     *                  @OA\Property(property="last", type="string"),
+     *                  @OA\Property(property="prev", type="string"),
+     *                  @OA\Property(property="next", type="string"),
+     *              ),
+     *              @OA\Property(property="meta", type="object", 
+     *                  @OA\Property(property="current_page", type="integer"),
+     *                  @OA\Property(property="last_page", type="integer"),
+     *                  @OA\Property(property="per_page", type="integer"),
+     *                  @OA\Property(property="to", type="integer"),
+     *                  @OA\Property(property="total", type="integer"),
+     *              )
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Bad informations"),
+     * )
+     */
+    public function index(Request $request)
+    {
+        $boxes = Auth::user()->boxes()->wherePivot('wishlist', boolval($request->input('wishlist', false)))->paginate(config('app.item_per_page'));
+        return LightBoxResource::collection($boxes);
     }
 
     /**
@@ -70,7 +125,7 @@ class BoxController extends ApiController
         Auth::user()->boxes()->syncWithoutDetaching([
             $box->id => ['wishlist' => $request->wishlist]
         ]);
-        return new BoxResource($box);
+        return $this->returnSuccess(new BoxResource($box));
     }
 
     /**
@@ -87,5 +142,6 @@ class BoxController extends ApiController
     public function deleteFromAuthUser(Box $box, Request $request)
     {
         Auth::user()->boxes()->detach($box->id);
+        return $this->returnNoContent();
     }
 }
