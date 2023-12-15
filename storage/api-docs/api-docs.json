@@ -237,6 +237,10 @@
                         "name": "wishlist",
                         "in": "query",
                         "example": false
+                    },
+                    {
+                        "name": "search",
+                        "in": "query"
                     }
                 ],
                 "responses": {

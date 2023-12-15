@@ -70,6 +70,7 @@ class BoxController extends ApiController
      *     path="/me/boxes",
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(in="query", name="wishlist", example=false),
+     *     @OA\Parameter(in="query", name="search"),
      *     @OA\Response(
      *         response=200,
      *         description="Get boxes associated to auth user",
@@ -95,7 +96,14 @@ class BoxController extends ApiController
      */
     public function index(Request $request)
     {
-        $boxes = Auth::user()->boxes()->wherePivot('wishlist', boolval($request->input('wishlist', false)))->paginate(config('app.item_per_page'));
+        $boxes = Auth::user()->boxes();
+        if ($request->search) {
+            $boxes->where(function ($query) use ($request) {
+                $query->where('boxes.title', 'LIKE', '%'.$request->search.'%')->orWhere('boxes.original_title', 'LIKE', '%'.$request->search.'%');
+            });
+        }
+        $boxes = $boxes->wherePivot('wishlist', filter_var($request->input('wishlist', false), FILTER_VALIDATE_BOOLEAN))
+                 ->paginate(config('app.item_per_page'));
         return LightBoxResource::collection($boxes);
     }
 
