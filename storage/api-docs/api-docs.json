@@ -191,6 +191,87 @@
                     }
                 ]
             }
+        },
+        "/me/boxes/{id}": {
+            "post": {
+                "tags": [
+                    "Boxes"
+                ],
+                "operationId": "69eb09530683c75c0bc4fb2a1e575441",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "wishlist": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Get box informations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Box"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Box not found"
+                    },
+                    "422": {
+                        "description": "Bad informations"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Boxes"
+                ],
+                "operationId": "42c5a0179f23cfd42840b3257eff5acd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Box removed from user list"
+                    },
+                    "404": {
+                        "description": "Box not found"
+                    },
+                    "422": {
+                        "description": "Bad informations"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -222,15 +303,15 @@
                     "editor": {
                         "type": "string"
                     },
+                    "illustration": {
+                        "$ref": "#/components/schemas/Illustration"
+                    },
                     "boxes": {
                         "type": "array",
                         "items": {
                             "description": "Box Object",
                             "type": "object"
                         }
-                    },
-                    "illustration": {
-                        "$ref": "#/components/schemas/Illustration"
                     }
                 },
                 "type": "object"
