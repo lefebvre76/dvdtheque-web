@@ -54,11 +54,26 @@
                                 }
                             }
                         }
-                    },
-                    "422": {
-                        "description": "The provided credentials are incorrect"
                     }
                 }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "1e357eb2c93a1bdabebcebfa088332bf",
+                "responses": {
+                    "204": {
+                        "description": "User Logout"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/me": {

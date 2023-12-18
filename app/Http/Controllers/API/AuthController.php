@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends ApiController
 {
-
     /**
      * @OA\Post(
      *     tags={"Auth"},
@@ -34,14 +33,13 @@ class AuthController extends ApiController
      *              ),
      *          ))
      *     }),
-     *     @OA\Response(response=422, description="The provided credentials are incorrect"),
      * )
      */
     public function login(Request $request)
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'message' => 'Invalid login details'
+                'message' => __('auth.failed')
             ], 422);
         }
 
@@ -50,6 +48,20 @@ class AuthController extends ApiController
         return $this->returnSuccess([
             'token' => $token,
         ]);
+    }
+
+    /**
+     * @OA\Post(
+     *     tags={"Auth"},
+     *     path="/logout",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(response=204, description="User Logout"),
+     * )
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return $this->returnNoContent();
     }
 
     /**

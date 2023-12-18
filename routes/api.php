@@ -19,6 +19,7 @@ use App\Http\Controllers\API\BoxController;
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('api.logout');
     Route::get('/me', [AuthController::class, 'me'])->name('api.me');
     Route::put('/me', [AuthController::class, 'update'])->name('api.me.update');
 
