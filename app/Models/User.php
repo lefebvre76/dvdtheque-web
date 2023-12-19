@@ -87,13 +87,15 @@ class User extends Authenticatable
             ->whereNotIn('box_user.box_id', function ($query) {
                 $query->select('box_box.pack_id')->from('box_box');
             })
-            ->where('box_user.user_id', $this->id);
+            ->where('box_user.user_id', $this->id)
+            ->where('box_user.wishlist', false);
 
         // Get boxes in packs
         $query_boxes_in_packs = DB::table('box_user')
             ->select('box_box.box_id as box_id')
             ->join('box_box', 'box_user.box_id', '=', 'box_box.pack_id')
-            ->where('box_user.user_id', $this->id);
+            ->where('box_user.user_id', $this->id)
+            ->where('box_user.wishlist', false);
 
         $subquery = $query_simple_boxes->union($query_boxes_in_packs);
 
@@ -101,4 +103,16 @@ class User extends Authenticatable
             $query->select('sub.box_id')->fromSub($subquery, 'sub');
         });
     }
+
+    public function favoriteKinds($limit = 3) 
+    {
+        return DB::table('box_kind')
+            ->select('kinds.id', 'kinds.name', DB::raw('count(*) as total'))
+            ->whereIn('box_id', $this->movies()->select('id')->pluck('id'))
+            ->join('kinds', 'kinds.id', '=', 'kind_id')
+            ->groupBy('kind_id')
+            ->orderBy('total', 'DESC')
+            ->limit($limit)
+            ->get();
+    } 
 }
