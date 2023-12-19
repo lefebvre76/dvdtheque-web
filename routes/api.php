@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BoxController;
+use App\Http\Controllers\API\MovieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me/boxes', [BoxController::class, 'index'])->name('api.box.me');
     Route::post('/me/boxes/{box}', [BoxController::class, 'addToAuthUser'])->name('api.box.me.add');
     Route::delete('/me/boxes/{box}', [BoxController::class, 'deleteFromAuthUser'])->name('api.box.me.remove');
+
+    Route::get('/me/movies', [MovieController::class, 'index'])->name('api.movies.me');
 });
