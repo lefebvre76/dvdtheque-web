@@ -22,6 +22,10 @@ class BoxResource extends JsonResource
      *      @OA\Property(property="edition", type="string"),
      *      @OA\Property(property="editor", type="string"),
      *      @OA\Property(property="illustration", ref="#/components/schemas/Illustration"),
+     *      @OA\Property(property="kinds", type="array", @OA\Items(ref="#/components/schemas/Kind")),
+     *      @OA\Property(property="directors", type="array", @OA\Items(ref="#/components/schemas/Celebrity")),
+     *      @OA\Property(property="actors", type="array", @OA\Items(ref="#/components/schemas/Celebrity")),
+     *      @OA\Property(property="composers", type="array", @OA\Items(ref="#/components/schemas/Celebrity")),
      *      @OA\Property(property="boxes", type="array", @OA\Items(type="object", description="Box Object")),
      * )
     */
@@ -38,6 +42,9 @@ class BoxResource extends JsonResource
             'editor' => $this->editor,
             'illustration' => $this->getMedia('cover')->first() ? new IllustrationResource($this->getMedia('cover')->first()) : null,
             'kinds' => KindResource::collection($this->kinds),
+            'directors' => CelebrityResource::collection($this->directors),
+            'actors' => CelebrityResource::collection($this->actors),
+            'composers' => CelebrityResource::collection($this->composers),
             'boxes' => BoxResource::collection($this->boxes),
         ];
     }

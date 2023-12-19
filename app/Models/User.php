@@ -106,11 +106,30 @@ class User extends Authenticatable
 
     public function favoriteKinds($limit = 3) 
     {
+        if ($this->movies()->count() < 1) {
+            return collect([]);
+        }
         return DB::table('box_kind')
             ->select('kinds.id', 'kinds.name', DB::raw('count(*) as total'))
             ->whereIn('box_id', $this->movies()->select('id')->pluck('id'))
             ->join('kinds', 'kinds.id', '=', 'kind_id')
             ->groupBy('kind_id')
+            ->orderBy('total', 'DESC')
+            ->limit($limit)
+            ->get();
+    } 
+
+    public function favoriteCelebrities($jobs, $limit = 3) 
+    {
+        if ($this->movies()->count() < 1) {
+            return collect([]);
+        }
+        return DB::table('box_celebrity')
+            ->select('celebrities.id', 'celebrities.name', DB::raw('count(*) as total'))
+            ->whereIn('box_id', $this->movies()->select('id')->pluck('id'))
+            ->whereIn('box_celebrity.job', $jobs)
+            ->join('celebrities', 'celebrities.id', '=', 'celebrity_id')
+            ->groupBy('celebrity_id')
             ->orderBy('total', 'DESC')
             ->limit($limit)
             ->get();

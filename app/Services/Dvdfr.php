@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Box;
 use App\Models\Kind;
+use App\Models\Celebrity;
 use Illuminate\Support\Facades\Http;
 
 class Dvdfr
@@ -78,6 +79,13 @@ class Dvdfr
             $box->kinds()->attach($kind);
         }
 
+        foreach ($xml->stars->star as $star) {
+            $celebrity = self::getOrCreateCelebrity((string) $star->attributes()->id, (string) $star);
+            $box->celebrities()->syncWithoutDetaching([
+                $celebrity->id => ['job' => $star->attributes()->type]
+            ]);
+        }
+
         $list_bonus = (array) $xml->listeBonusHtml;
         if (!empty($list_bonus)) {
             foreach ($list_bonus['bonushtml'] as $bonus) {
@@ -99,6 +107,17 @@ class Dvdfr
             return $kind;
         }
         return Kind::create([
+            'dvdfr_id' => $id, 
+            'name' => $name
+        ]);
+    }
+
+    private static function getOrCreateCelebrity($id, $name) {
+        $celebrity = Celebrity::where('dvdfr_id', $id)->first();
+        if ($celebrity) {
+            return $celebrity;
+        }
+        return Celebrity::create([
             'dvdfr_id' => $id, 
             'name' => $name
         ]);

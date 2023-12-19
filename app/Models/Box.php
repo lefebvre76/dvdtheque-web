@@ -47,11 +47,51 @@ class Box extends Model implements HasMedia
     }
 
     /**
-     * The boxes that belong to the box.
+     * The kinds that belong to the box.
      */
     public function kinds(): BelongsToMany
     {
         return $this->belongsToMany(Kind::class, 'box_kind')->withTimestamps();
+    }
+
+    /**
+     * The celebrities that belong to the box.
+     */
+    public function celebrities(): BelongsToMany
+    {
+        return $this->belongsToMany(Celebrity::class)->withPivot('job')->withTimestamps();
+    }
+
+    /**
+     * The directors that belong to the box.
+     */
+    public function directors(): BelongsToMany
+    {
+        return $this->celebrities()->wherePivotIn('job', ['Réalisateur']);
+    }
+
+    /**
+     * The actors that belong to the box.
+     */
+    public function actors(): BelongsToMany
+    {
+        return $this->celebrities()->wherePivotIn('job', ['Acteur', 'Voix en VO', 'Voix en VF']);
+    }
+
+    /**
+     * The scriptwriters that belong to the box.
+     */
+    public function scriptwriters(): BelongsToMany
+    {
+        return $this->celebrities()->wherePivotIn('job', ['Scénariste']);
+    }
+
+    /**
+     * The composers that belong to the box.
+     */
+    public function composers(): BelongsToMany
+    {
+        return $this->celebrities()->wherePivotIn('job', ['Compositeur']);
     }
 
     public function registerMediaConversions(Media $media = null): void

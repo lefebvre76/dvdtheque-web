@@ -518,6 +518,12 @@
                     "illustration": {
                         "$ref": "#/components/schemas/Illustration"
                     },
+                    "kinds": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Kind"
+                        }
+                    },
                     "boxes": {
                         "type": "array",
                         "items": {
@@ -535,6 +541,18 @@
                         "type": "string"
                     },
                     "thumbnail": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Kind": {
+                "title": "Kind",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
                         "type": "string"
                     }
                 },
@@ -558,6 +576,21 @@
                 },
                 "type": "object"
             },
+            "PopularItem": {
+                "title": "PopularItem",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "title": "User",
                 "properties": {
@@ -569,6 +602,30 @@
                     },
                     "email": {
                         "type": "string"
+                    },
+                    "total_boxes": {
+                        "type": "integer"
+                    },
+                    "total_movies": {
+                        "type": "integer"
+                    },
+                    "favorite_kinds": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PopularItem"
+                        }
+                    },
+                    "favorite_directors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PopularItem"
+                        }
+                    },
+                    "favorite_actors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PopularItem"
+                        }
                     }
                 },
                 "type": "object"
