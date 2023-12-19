@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Box;
+use App\Models\Kind;
 use Illuminate\Support\Facades\Http;
 
 class Dvdfr
@@ -72,6 +73,11 @@ class Dvdfr
             $box->addMediaFromUrl($url_image)->toMediaCollection('cover');
         }
 
+        foreach ($xml->categories->categorie as $category) {
+            $kind = self::getOrCreateKind((string) $category->attributes(), (string) $category);
+            $box->kinds()->attach($kind);
+        }
+
         $list_bonus = (array) $xml->listeBonusHtml;
         if (!empty($list_bonus)) {
             foreach ($list_bonus['bonushtml'] as $bonus) {
@@ -85,5 +91,16 @@ class Dvdfr
         }
 
         return $box;
+    }
+
+    private static function getOrCreateKind($id, $name) {
+        $kind = Kind::where('dvdfr_id', $id)->first();
+        if ($kind) {
+            return $kind;
+        }
+        return Kind::create([
+            'dvdfr_id' => $id, 
+            'name' => $name
+        ]);
     }
 }

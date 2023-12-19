@@ -46,6 +46,14 @@ class Box extends Model implements HasMedia
         return $this->belongsToMany(Box::class, 'box_box', 'pack_id', 'box_id')->withTimestamps();
     }
 
+    /**
+     * The boxes that belong to the box.
+     */
+    public function kinds(): BelongsToMany
+    {
+        return $this->belongsToMany(Kind::class, 'box_kind')->withTimestamps();
+    }
+
     public function registerMediaConversions(Media $media = null): void
     {
         $this

@@ -37,6 +37,7 @@ class BoxResource extends JsonResource
             'edition' => $this->edition,
             'editor' => $this->editor,
             'illustration' => $this->getMedia('cover')->first() ? new IllustrationResource($this->getMedia('cover')->first()) : null,
+            'kinds' => KindResource::collection($this->kinds),
             'boxes' => BoxResource::collection($this->boxes),
         ];
     }
