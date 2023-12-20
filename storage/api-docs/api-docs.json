@@ -524,12 +524,41 @@
                             "$ref": "#/components/schemas/Kind"
                         }
                     },
+                    "directors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Celebrity"
+                        }
+                    },
+                    "actors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Celebrity"
+                        }
+                    },
+                    "composers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Celebrity"
+                        }
+                    },
                     "boxes": {
                         "type": "array",
                         "items": {
-                            "description": "Box Object",
-                            "type": "object"
+                            "$ref": "#/components/schemas/LightBox"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "Celebrity": {
+                "title": "Celebrity",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
                     }
                 },
                 "type": "object"

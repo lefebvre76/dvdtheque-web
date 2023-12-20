@@ -26,7 +26,7 @@ class BoxResource extends JsonResource
      *      @OA\Property(property="directors", type="array", @OA\Items(ref="#/components/schemas/Celebrity")),
      *      @OA\Property(property="actors", type="array", @OA\Items(ref="#/components/schemas/Celebrity")),
      *      @OA\Property(property="composers", type="array", @OA\Items(ref="#/components/schemas/Celebrity")),
-     *      @OA\Property(property="boxes", type="array", @OA\Items(type="object", description="Box Object")),
+     *      @OA\Property(property="boxes", type="array", @OA\Items(ref="#/components/schemas/LightBox")),
      * )
     */
     public function toArray(Request $request): array
@@ -45,7 +45,7 @@ class BoxResource extends JsonResource
             'directors' => CelebrityResource::collection($this->directors),
             'actors' => CelebrityResource::collection($this->actors),
             'composers' => CelebrityResource::collection($this->composers),
-            'boxes' => BoxResource::collection($this->boxes),
+            'boxes' => LightBoxResource::collection($this->boxes),
         ];
     }
 }
