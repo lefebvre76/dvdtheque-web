@@ -38,7 +38,7 @@ return [
     ],
     'boolean'              => 'Le champ :attribute doit être vrai ou faux.',
     'can' => 'The :attribute field contains an unauthorized value.',
-    'confirmed'            => 'Le champ de confirmation :attribute ne correspond pas.',
+    'confirmed'            => 'Le champ de confirmation ne correspond pas.',
     'current_password'     => 'Le mot de passe est incorrect.',
     'date'                 => 'Le champ :attribute n\'est pas une date valide.',
     'date_equals'          => 'Le champ :attribute doit être une date égale à :date.',
