@@ -42,6 +42,9 @@ class BoxController extends ApiController
         if (!$box) {
             $box = Dvdfr::store($request->bar_code);
         }
+        if (!$box) {
+            return $this->returnNotFound();
+        }
         return $this->returnSuccess(new BoxResource($box));
     }
 

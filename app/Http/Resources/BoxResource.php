@@ -36,7 +36,7 @@ class BoxResource extends JsonResource
             'type' => $this->type,
             'title' => $this->title,
             'original_title' => $this->original_title,
-            'year' => $this->year,
+            'year' => intval($this->year),
             'synopsis' => $this->synopsis,
             'edition' => $this->edition,
             'editor' => $this->editor,
