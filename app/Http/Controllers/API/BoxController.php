@@ -105,6 +105,7 @@ class BoxController extends ApiController
                 $query->where('boxes.title', 'LIKE', '%'.$request->search.'%')->orWhere('boxes.original_title', 'LIKE', '%'.$request->search.'%');
             });
         }
+        $boxes = $boxes->orderBy('boxes.title');
         $boxes = $boxes->wherePivot('wishlist', filter_var($request->input('wishlist', false), FILTER_VALIDATE_BOOLEAN))
                  ->paginate(config('app.item_per_page'));
         return LightBoxResource::collection($boxes);
