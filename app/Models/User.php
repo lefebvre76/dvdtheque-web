@@ -113,7 +113,7 @@ class User extends Authenticatable
             ->select('kinds.id', 'kinds.name', DB::raw('count(*) as total'))
             ->whereIn('box_id', $this->movies()->select('id')->pluck('id'))
             ->join('kinds', 'kinds.id', '=', 'kind_id')
-            ->groupBy('kind_id')
+            ->groupBy('kinds.id', 'kinds.name')
             ->orderBy('total', 'DESC')
             ->limit($limit)
             ->get();
@@ -129,7 +129,7 @@ class User extends Authenticatable
             ->whereIn('box_id', $this->movies()->select('id')->pluck('id'))
             ->whereIn('box_celebrity.job', $jobs)
             ->join('celebrities', 'celebrities.id', '=', 'celebrity_id')
-            ->groupBy('celebrity_id')
+            ->groupBy('celebrities.id', 'celebrities.name')
             ->orderBy('total', 'DESC')
             ->limit($limit)
             ->get();
