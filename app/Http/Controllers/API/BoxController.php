@@ -102,7 +102,16 @@ class BoxController extends ApiController
         $boxes = Auth::user()->boxes();
         if ($request->search) {
             $boxes->where(function ($query) use ($request) {
-                $query->where('boxes.title', 'LIKE', '%'.$request->search.'%')->orWhere('boxes.original_title', 'LIKE', '%'.$request->search.'%');
+                $query->where('boxes.title', 'LIKE', '%'.$request->search.'%')
+                      ->orWhere('boxes.original_title', 'LIKE', '%'.$request->search.'%')
+                      ->orWhereIn('boxes.id', function ($query) use ($request) {
+                        $query
+                            ->select('box_celebrity.box_id')
+                            ->from('box_celebrity')
+                            ->join('celebrities', 'celebrities.id', '=', 'box_celebrity.celebrity_id')
+                            ->where('name', 'LIKE', '%'.$request->search.'%')
+                        ;
+                    });
             });
         }
         $boxes = $boxes->orderBy('boxes.title');
