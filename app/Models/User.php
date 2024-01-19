@@ -51,7 +51,7 @@ class User extends Authenticatable
      */
     public function boxes(): BelongsToMany
     {
-        return $this->belongsToMany(Box::class)->withTimestamps();
+        return $this->belongsToMany(Box::class)->withTimestamps()->withPivot('wishlist');
     }
 
     /**

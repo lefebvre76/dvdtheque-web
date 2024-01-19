@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class BoxResource extends JsonResource
 {
@@ -27,10 +28,19 @@ class BoxResource extends JsonResource
      *      @OA\Property(property="actors", type="array", @OA\Items(ref="#/components/schemas/Celebrity")),
      *      @OA\Property(property="composers", type="array", @OA\Items(ref="#/components/schemas/Celebrity")),
      *      @OA\Property(property="boxes", type="array", @OA\Items(ref="#/components/schemas/LightBox")),
+     *      @OA\Property(property="in_wishlist", type="boolean"),
+     *      @OA\Property(property="in_collection", type="boolean"),
      * )
     */
     public function toArray(Request $request): array
     {
+        $in_wishlist = false;
+        $in_collection = false;
+        $box = Auth::user()->boxes()->where('boxes.id', $this->id)->first();
+        if ($box) {
+            $in_wishlist = filter_var($box->pivot->wishlist, FILTER_VALIDATE_BOOLEAN);
+            $in_collection = !filter_var($box->pivot->wishlist, FILTER_VALIDATE_BOOLEAN);
+        }
         return [
             'id' => $this->id,
             'type' => $this->type,
@@ -46,6 +56,8 @@ class BoxResource extends JsonResource
             'actors' => CelebrityResource::collection($this->actors),
             'composers' => CelebrityResource::collection($this->composers),
             'boxes' => LightBoxResource::collection($this->boxes),
+            'in_wishlist' => $in_wishlist,
+            'in_collection' => $in_collection
         ];
     }
 }

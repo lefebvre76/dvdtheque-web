@@ -602,6 +602,12 @@
                         "items": {
                             "$ref": "#/components/schemas/LightBox"
                         }
+                    },
+                    "in_wishlist": {
+                        "type": "boolean"
+                    },
+                    "in_collection": {
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
