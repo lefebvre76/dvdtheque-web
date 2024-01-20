@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Box;
 use App\Models\Kind;
 use App\Models\Celebrity;
+use App\Services\Tmdb;
 use Illuminate\Support\Facades\Http;
 
 class Dvdfr
@@ -117,9 +118,11 @@ class Dvdfr
         if ($celebrity) {
             return $celebrity;
         }
-        return Celebrity::create([
+        $celebrity = Celebrity::create([
             'dvdfr_id' => $id, 
             'name' => $name
         ]);
+        Tmdb::downloadPersonPhoto($celebrity);
+        return $celebrity;
     }
 }

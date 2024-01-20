@@ -15,6 +15,7 @@ class CelebrityResource extends JsonResource
      *      title="Celebrity",
      *      @OA\Property(property="id", type="integer"),
      *      @OA\Property(property="name", type="string"),
+     *      @OA\Property(property="photo", ref="#/components/schemas/Illustration"),
      * )
     */
     public function toArray(Request $request): array
@@ -22,6 +23,7 @@ class CelebrityResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'photo' => $this->getMedia('photo')->first() ? new IllustrationResource($this->getMedia('photo')->first()) : null,
         ];
     }
 }
