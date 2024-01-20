@@ -86,6 +86,25 @@ class PostLoanTest extends TestCase
         $response->assertStatus(201);
     }
 
+    public function test_auth_user_cannot_post_loan_if_he_has_box_in_wishlist(): void
+    {
+        $box = Box::factory()->create();
+        $user = User::factory()->create();
+        $user->boxes()->syncWithoutDetaching([
+            $box->id => ['wishlist' => true]
+        ]);
+        $response = $this
+        ->actingAs($user)
+        ->postJson(route('api.loan.store'), [
+            'box_id' => $box->id,
+            'type' => Loan::TYPE_LOAN,
+            'contact' => 'John Doo'
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors('box_id');
+    }
+
     public function test_auth_user_cannot_post_loan_if_box_is_already_loaned(): void
     {
         $box = Box::factory()->create();

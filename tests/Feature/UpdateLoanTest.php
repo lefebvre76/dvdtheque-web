@@ -162,6 +162,31 @@ class UpdateLoanTest extends TestCase
             ]);
     }
 
+    public function test_auth_user_can_update_loan_with_other_box_in_wishlist(): void
+    {
+        $box = Box::factory()->create();
+        $other_box = Box::factory()->create();
+        $user = User::factory()->create();
+        $user->boxes()->syncWithoutDetaching([
+            $box->id => ['wishlist' => false]
+        ]);
+        $user->boxes()->syncWithoutDetaching([
+            $other_box->id => ['wishlist' => true]
+        ]);
+        $loan = $this->createLoan($user, $box);
+
+        $response = $this
+        ->actingAs($user)
+        ->putJson(route('api.loan.update', ['loan' => $loan->id]), [
+            'box_id' => $other_box->id,
+            'type' => Loan::TYPE_LOAN,
+            'contact' => 'John Doo'
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors('box_id');
+    }
+
     public function test_auth_user_can_update_loan_if_he_has_parent_box(): void
     {
         $user = User::factory()->create();
