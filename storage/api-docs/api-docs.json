@@ -916,6 +916,9 @@
                     },
                     "name": {
                         "type": "string"
+                    },
+                    "photo": {
+                        "$ref": "#/components/schemas/Illustration"
                     }
                 },
                 "type": "object"

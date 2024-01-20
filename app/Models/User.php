@@ -133,7 +133,7 @@ class User extends Authenticatable
         if ($this->movies()->count() < 1) {
             return collect([]);
         }
-        return DB::table('box_celebrity')
+        $ids = DB::table('box_celebrity')
             ->select('celebrities.id', 'celebrities.name', DB::raw('count(*) as total'))
             ->whereIn('box_id', $this->movies()->select('id')->pluck('id'))
             ->whereIn('box_celebrity.job', $jobs)
@@ -141,6 +141,8 @@ class User extends Authenticatable
             ->groupBy('celebrities.id', 'celebrities.name')
             ->orderBy('total', 'DESC')
             ->limit($limit)
-            ->get();
+            ->get()
+            ->pluck('id')->toArray();
+        return Celebrity::whereIn('id', $ids)->get();
     } 
 }
