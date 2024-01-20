@@ -51,6 +51,14 @@ class MovieController extends ApiController
                             ->join('celebrities', 'celebrities.id', '=', 'box_celebrity.celebrity_id')
                             ->where('name', 'LIKE', '%'.$request->search.'%')
                         ;
+                    })
+                    ->orWhereIn('boxes.id', function ($query) use ($request) {
+                        $query
+                            ->select('box_kind.box_id')
+                            ->from('box_kind')
+                            ->join('kinds', 'kinds.id', '=', 'box_kind.kinds_id')
+                            ->where('name', 'LIKE', '%'.$request->search.'%')
+                        ;
                     });
             });
         }
