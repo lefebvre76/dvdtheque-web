@@ -16,6 +16,69 @@ use Carbon\Carbon;
 class LoanController extends ApiController
 {
     /**
+     * @OA\Get(
+     *     tags={"Loans"},
+     *     path="/loans",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(in="query", name="type", example="LOAN | BORROW"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Get loans (and borrows) associated to auth user",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Loan")),
+     *              @OA\Property(property="links", type="object", 
+     *                  @OA\Property(property="first", type="string"),
+     *                  @OA\Property(property="last", type="string"),
+     *                  @OA\Property(property="prev", type="string"),
+     *                  @OA\Property(property="next", type="string"),
+     *              ),
+     *              @OA\Property(property="meta", type="object", 
+     *                  @OA\Property(property="current_page", type="integer"),
+     *                  @OA\Property(property="last_page", type="integer"),
+     *                  @OA\Property(property="per_page", type="integer"),
+     *                  @OA\Property(property="to", type="integer"),
+     *                  @OA\Property(property="total", type="integer"),
+     *              )
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Bad informations"),
+     * )
+     */
+    public function index(Request $request)
+    {
+        $loans = Auth::user()->loans();
+        if ($request->type) {
+            $loans->where('type', $request->type);
+        }
+        $loans = $loans->orderBy('reminder');
+        $loans = $loans->paginate(config('app.item_per_page'));
+        return LoanResource::collection($loans);
+    }
+
+    /**
+     * @OA\Get(
+     *     tags={"Loans"},
+     *     path="/loans/{id}",
+     *     @OA\Parameter(in="path", name="id"),
+     *     security={{"bearerAuth": {}}},
+     *      @OA\Response(
+     *         response=200,
+     *         description="Loan informations",
+     *         @OA\JsonContent(ref="#/components/schemas/Loan")
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=404, description="Not found"),
+     * )
+     */
+    public function show(Loan $loan)
+    {
+        if ($loan->user_id != Auth::user()->id) {
+            return $this->returnNotFound();
+        }
+        return new LoanResource($loan);
+    }
+
+    /**
      * @OA\Post(
      *     tags={"Loans"},
      *     path="/loans",

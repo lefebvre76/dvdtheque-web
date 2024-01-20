@@ -36,6 +36,8 @@ Route::middleware(AcceptLanguageMiddleware::class)->group(function () {
 
         Route::get('/me/movies', [MovieController::class, 'index'])->name('api.movies.me');
 
+        Route::get('/loans', [LoanController::class, 'index'])->name('api.loan.index');
+        Route::get('/loans/{loan}', [LoanController::class, 'show'])->name('api.loan.show');
         Route::post('/loans', [LoanController::class, 'store'])->name('api.loan.store');
         Route::put('/loans/{loan}', [LoanController::class, 'update'])->name('api.loan.update');
         Route::delete('/loans/{loan}', [LoanController::class, 'delete'])->name('api.loan.delete');
