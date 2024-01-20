@@ -32,8 +32,8 @@ class UserResource extends JsonResource
             'total_boxes' => $this->boxes()->wherePivot('wishlist', false)->count(),
             'total_movies' => $this->movies()->count(),
             'favorite_kinds' => PopularItemResource::collection($this->favoriteKinds(3)),
-            'favorite_directors' => PopularItemResource::collection($this->favoriteCelebrities(['Réalisateur'], 3)),
-            'favorite_actors' => PopularItemResource::collection($this->favoriteCelebrities(['Voix en VO', 'Voix en VF', 'Acteur'], 3))
+            'favorite_directors' => CelebrityResource::collection($this->favoriteCelebrities(['Réalisateur'], 3)),
+            'favorite_actors' => CelebrityResource::collection($this->favoriteCelebrities(['Voix en VO', 'Voix en VF', 'Acteur'], 3))
         ];
     }
 }
