@@ -235,4 +235,62 @@ class PostLoanTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonValidationErrors('box_id');
     }
+
+    public function test_auth_user_can_borrow_box(): void
+    {
+        $box = Box::factory()->create();
+        $user = User::factory()->create();
+        $response = $this
+            ->actingAs($user)
+            ->postJson(route('api.loan.store'), [
+                'box_id' => $box->id,
+                'type' => Loan::TYPE_BORROW,
+                'contact' => 'John Doo'
+            ]);
+
+        $response->assertStatus(201);
+    }
+
+    public function test_auth_user_can_borrow_box_he_already_has(): void
+    {
+        $box = Box::factory()->create();
+        $user = User::factory()->create();
+        $user->boxes()->syncWithoutDetaching([
+            $box->id => ['wishlist' => false],
+        ]);
+        $response = $this
+            ->actingAs($user)
+            ->postJson(route('api.loan.store'), [
+                'box_id' => $box->id,
+                'type' => Loan::TYPE_BORROW,
+                'contact' => 'John Doo'
+            ]);
+
+        $response->assertStatus(201);
+    }
+
+    public function test_auth_user_can_borrow_box_he_already_has_and_he_leaned(): void
+    {
+        $box = Box::factory()->create();
+        $user = User::factory()->create();
+        $user->boxes()->syncWithoutDetaching([
+            $box->id => ['wishlist' => false],
+        ]);
+        Loan::create([
+            'user_id' => $user->id,
+            'box_id' => $box->id,
+            'type' => Loan::TYPE_LOAN,
+            'contact' => 'John Doo'
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->postJson(route('api.loan.store'), [
+                'box_id' => $box->id,
+                'type' => Loan::TYPE_BORROW,
+                'contact' => 'John Doo'
+            ]);
+
+        $response->assertStatus(201);
+    }
 }

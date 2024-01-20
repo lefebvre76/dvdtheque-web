@@ -43,16 +43,18 @@ class LoanController extends ApiController
      */
     public function store(PostLoan $request)
     {
-        $loan_exists_query = Auth::user()->loans();
-        if ($request->box_parent_id) {
-            $loan_exists_query->where(function ($query) use ($request) {
-                $query->where('box_id', $request->box_id)->where('box_parent_id', $request->box_parent_id);
-            })->orWhere('box_id', $request->box_parent_id);
-        } else {
-            $loan_exists_query->where('box_id', $request->box_id)->whereNull('box_parent_id');
-        }
-        if ($loan_exists_query->exists()) {
-            return $this->returnResponse('Product already loaned', 403);
+        if ($request->type == Loan::TYPE_LOAN) {
+            $loan_exists_query = Auth::user()->loans();
+            if ($request->box_parent_id) {
+                $loan_exists_query->where(function ($query) use ($request) {
+                    $query->where('box_id', $request->box_id)->where('box_parent_id', $request->box_parent_id);
+                })->orWhere('box_id', $request->box_parent_id);
+            } else {
+                $loan_exists_query->where('box_id', $request->box_id)->whereNull('box_parent_id');
+            }
+            if ($loan_exists_query->exists()) {
+                return $this->returnResponse('Product already loaned', 403);
+            }
         }
         $loan = Loan::create(array_merge([
             'user_id' => Auth::user()->id
@@ -95,17 +97,18 @@ class LoanController extends ApiController
         if ($loan->user_id != Auth::user()->id) {
             return $this->returnNotFound();
         }
-
-        $loan_exists_query = Auth::user()->loans()->where('id', '<>', $loan->id);
-        if ($request->box_parent_id) {
-            $loan_exists_query->where(function ($query) use ($request) {
-                $query->where('box_id', $request->box_id)->where('box_parent_id', $request->box_parent_id);
-            })->orWhere('box_id', $request->box_parent_id);
-        } else {
-            $loan_exists_query->where('box_id', $request->box_id)->whereNull('box_parent_id');
-        }
-        if ($loan_exists_query->exists()) {
-            return $this->returnResponse('Product already loaned', 403);
+        if ($request->type == Loan::TYPE_LOAN) {
+            $loan_exists_query = Auth::user()->loans()->where('id', '<>', $loan->id);
+            if ($request->box_parent_id) {
+                $loan_exists_query->where(function ($query) use ($request) {
+                    $query->where('box_id', $request->box_id)->where('box_parent_id', $request->box_parent_id);
+                })->orWhere('box_id', $request->box_parent_id);
+            } else {
+                $loan_exists_query->where('box_id', $request->box_id)->whereNull('box_parent_id');
+            }
+            if ($loan_exists_query->exists()) {
+                return $this->returnResponse('Product already loaned', 403);
+            }
         }
         $loan->update($request->only([
             'box_id', 'type', 'contact', 'contact_informations', 'reminder', 'comment'
