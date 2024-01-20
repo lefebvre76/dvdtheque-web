@@ -19,6 +19,7 @@ class Loan extends Model
     protected $fillable = [
         'user_id',
         'box_id',
+        'box_parent_id',
         'type',
         'contact',
         'contact_informations',
