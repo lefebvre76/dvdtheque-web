@@ -169,6 +169,11 @@ return [
         "name" => "Nom",
         "password" => "Mot de passe",
         "email" => "Email",
+        "box_id" => "Produit",
+        "type" => "Type",
+        "contact" => "Contact",
+        "reminder" => "Date de rappel",
+        "comment" => "Commentaire",
     ],
 
 ];

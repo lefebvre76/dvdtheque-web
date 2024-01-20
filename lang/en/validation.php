@@ -186,6 +186,15 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        "name" => "Name",
+        "password" => "Password",
+        "email" => "Email",
+        "box_id" => "Product",
+        "type" => "Type",
+        "contact" => "Contact",
+        "reminder" => "Reminder date",
+        "comment" => "Comment",
+    ],
 
 ];

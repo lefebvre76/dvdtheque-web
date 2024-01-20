@@ -447,11 +447,307 @@
                     "204": {
                         "description": "Box removed from user list"
                     },
+                    "403": {
+                        "description": "Product loaned"
+                    },
                     "404": {
                         "description": "Box not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/loans": {
+            "get": {
+                "tags": [
+                    "Loans"
+                ],
+                "operationId": "f02d3184af58a46dd90f95c71f998491",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "example": "LOAN | BORROW"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get loans (and borrows) associated to auth user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Loan"
+                                            }
+                                        },
+                                        "links": {
+                                            "properties": {
+                                                "first": {
+                                                    "type": "string"
+                                                },
+                                                "last": {
+                                                    "type": "string"
+                                                },
+                                                "prev": {
+                                                    "type": "string"
+                                                },
+                                                "next": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "to": {
+                                                    "type": "integer"
+                                                },
+                                                "total": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "422": {
                         "description": "Bad informations"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Loans"
+                ],
+                "operationId": "3e2e68d534c42b12a5467b44f2cb7811",
+                "requestBody": {
+                    "description": "The loan informations",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "box_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "LOAN"
+                                    },
+                                    "contact": {
+                                        "type": "string",
+                                        "example": "John Doo"
+                                    },
+                                    "contact_informations": {
+                                        "type": "string",
+                                        "example": "json"
+                                    },
+                                    "reminder": {
+                                        "type": "string",
+                                        "example": "timestamp"
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "example": "comment"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Loan created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Loan"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Product already loaned"
+                    },
+                    "422": {
+                        "description": "Bad informations"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/loans/{id}": {
+            "get": {
+                "tags": [
+                    "Loans"
+                ],
+                "operationId": "ef8d4308de148f712c493f1fc2ba7a6c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Loan informations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Loan"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Loans"
+                ],
+                "operationId": "132b973b2dc9dc6ae3c25f6e304b94e7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "requestBody": {
+                    "description": "The loan informations",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "box_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "LOAN"
+                                    },
+                                    "contact": {
+                                        "type": "string",
+                                        "example": "John Doo"
+                                    },
+                                    "contact_informations": {
+                                        "type": "string",
+                                        "example": "json"
+                                    },
+                                    "reminder": {
+                                        "type": "string",
+                                        "example": "timestamp"
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "example": "comment"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated loan informations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Product already loaned"
+                    },
+                    "422": {
+                        "description": "Bad informations"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Loans"
+                ],
+                "operationId": "769536801cc213a873ea82fb763c21db",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated loan informations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Loan removed"
+                    },
+                    "404": {
+                        "description": "Loan not found"
                     }
                 },
                 "security": [
@@ -662,6 +958,36 @@
                     },
                     "illustration": {
                         "$ref": "#/components/schemas/Illustration"
+                    }
+                },
+                "type": "object"
+            },
+            "Loan": {
+                "title": "Loan",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "box": {
+                        "$ref": "#/components/schemas/LightBox"
+                    },
+                    "parent_box": {
+                        "$ref": "#/components/schemas/LightBox"
+                    },
+                    "contact": {
+                        "type": "string"
+                    },
+                    "contact_informations": {
+                        "type": "string"
+                    },
+                    "reminder": {
+                        "type": "integer"
+                    },
+                    "comment": {
+                        "type": "string"
                     }
                 },
                 "type": "object"

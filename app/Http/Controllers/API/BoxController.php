@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Box;
+use App\Models\Loan;
 use App\Http\Requests\UpdateUser;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\BoxResource;
@@ -156,12 +157,17 @@ class BoxController extends ApiController
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(in="path", name="id"),
      *     @OA\Response(response=204, description="Box removed from user list"),
+     *     @OA\Response(response=403, description="Product loaned"),
      *     @OA\Response(response=404, description="Box not found"),
-     *     @OA\Response(response=422, description="Bad informations"),
      * )
      */
     public function deleteFromAuthUser(Box $box, Request $request)
     {
+        if (Auth::user()->loans()->where('type', Loan::TYPE_LOAN)->where(function ($query) use ($box) {
+            $query->where('box_id', $box->id)->orWhere('box_parent_id', $box->id);
+        })->exists()) {
+            return $this->returnResponse('Product loaned', 403);
+        }
         Auth::user()->boxes()->detach($box->id);
         return $this->returnNoContent();
     }
