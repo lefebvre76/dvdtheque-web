@@ -29,11 +29,11 @@ class LoanResource extends JsonResource
         return [
             'id' => $this->id,
             'box' => new LightBoxResource($this->box),
-            'parent_box' => new LightBoxResource($this->box),
+            'parent_box' => $this->parent_box ? new LightBoxResource($this->parent_box) : null,
             'type' => $this->type,
             'contact' => $this->contact,
             'contact_informations' => $this->contact_informations,
-            'reminder' => $this->reminder,
+            'reminder' => $this->reminder ? $this->reminder->timestamp : null,
             'comment' => $this->comment,
         ];
     }

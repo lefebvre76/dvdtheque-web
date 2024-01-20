@@ -8,6 +8,7 @@ use App\Models\Loan;
 use App\Models\Box;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Carbon\Carbon;
 
 class PostLoanTest extends TestCase
 {
@@ -145,10 +146,16 @@ class PostLoanTest extends TestCase
             'box_id' => $child_box->id,
             'box_parent_id' => $parent_box->id,
             'type' => Loan::TYPE_LOAN,
-            'contact' => 'John Doo'
+            'contact' => 'John Doo',
+            'reminder' => 1706742000,
+            'comment' => 'Test comment',
         ]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(201)
+        ->assertJson([
+            'reminder' => 1706742000
+        ]);
+        $loan = Loan::orderBy('id', 'DESC')->first();
     }
 
     public function test_auth_user_can_post_loan_with_parent_box(): void

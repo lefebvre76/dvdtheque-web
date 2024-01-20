@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Loan;
 use App\Http\Requests\PostLoan;
 use App\Http\Requests\UpdateLoan;
+use Carbon\Carbon;
 
 class LoanController extends ApiController
 {
@@ -56,10 +57,15 @@ class LoanController extends ApiController
                 return $this->returnResponse('Product already loaned', 403);
             }
         }
+        $reminder = null;
+        if ($request->reminder) {
+            $reminder = Carbon::createFromTimestamp($request->reminder)->setTimezone('UTC');
+        }
         $loan = Loan::create(array_merge([
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'reminder' => $reminder
         ], $request->only([
-            'box_id', 'type', 'contact', 'contact_informations', 'reminder', 'comment'
+            'box_id', 'type', 'contact', 'contact_informations', 'comment'
         ])));
         return new LoanResource($loan);
     }
@@ -110,9 +116,15 @@ class LoanController extends ApiController
                 return $this->returnResponse('Product already loaned', 403);
             }
         }
-        $loan->update($request->only([
-            'box_id', 'type', 'contact', 'contact_informations', 'reminder', 'comment'
-        ]));
+        $reminder = null;
+        if ($request->reminder) {
+            $reminder = Carbon::createFromTimestamp($request->reminder)->setTimezone('UTC');
+        }
+        $loan->update(array_merge([
+            'reminder' => $reminder
+        ], $request->only([
+            'box_id', 'type', 'contact', 'contact_informations', 'comment'
+        ])));
         return $this->returnSuccess(new LoanResource($loan));
     }
 
