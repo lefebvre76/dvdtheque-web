@@ -38,6 +38,9 @@ class Dvdfr
 
     private static function createWithId($dvdfr_id) 
     {
+        if (Box::where('dvdfr_id', $dvdfr_id)->exists()) {
+            return Box::where('dvdfr_id', $dvdfr_id)->first();
+        }
         $url = 'https://www.dvdfr.com/api/dvd.php?id='.$dvdfr_id;
         $response = Http::get($url);
         $response_content = $response->body();
