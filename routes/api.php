@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BoxController;
+use App\Http\Controllers\API\LoanController;
 use App\Http\Controllers\API\MovieController;
 use App\Http\Middleware\AcceptLanguageMiddleware;
 
@@ -34,5 +35,9 @@ Route::middleware(AcceptLanguageMiddleware::class)->group(function () {
         Route::delete('/me/boxes/{box}', [BoxController::class, 'deleteFromAuthUser'])->name('api.box.me.remove');
 
         Route::get('/me/movies', [MovieController::class, 'index'])->name('api.movies.me');
+
+        Route::post('/loans', [LoanController::class, 'store'])->name('api.loan.store');
+        Route::put('/loans/{loan}', [LoanController::class, 'update'])->name('api.loan.update');
+        Route::delete('/loans/{loan}', [LoanController::class, 'delete'])->name('api.loan.delete');
     });
 });

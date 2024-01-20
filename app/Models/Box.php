@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -12,6 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Box extends Model implements HasMedia
 {
     use InteractsWithMedia;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
