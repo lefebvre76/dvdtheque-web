@@ -88,6 +88,7 @@ class LoanController extends ApiController
      *          description="The loan informations",
      *          @OA\JsonContent(
      *              @OA\Property(property="box_id", type="integer", example="1"),
+     *              @OA\Property(property="box_parent_id", type="integer", example="1"),
      *              @OA\Property(property="type", type="string", example="LOAN"),
      *              @OA\Property(property="contact", type="string", example="John Doo"),
      *              @OA\Property(property="contact_informations", type="string", example="json"),
@@ -128,7 +129,7 @@ class LoanController extends ApiController
             'user_id' => Auth::user()->id,
             'reminder' => $reminder
         ], $request->only([
-            'box_id', 'type', 'contact', 'contact_informations', 'comment'
+            'box_id', 'box_parent_id', 'type', 'contact', 'contact_informations', 'comment'
         ])));
         return new LoanResource($loan);
     }
@@ -143,6 +144,7 @@ class LoanController extends ApiController
      *          description="The loan informations",
      *          @OA\JsonContent(
      *              @OA\Property(property="box_id", type="integer", example="1"),
+     *              @OA\Property(property="box_parent_id", type="integer", example="1"),
      *              @OA\Property(property="type", type="string", example="LOAN"),
      *              @OA\Property(property="contact", type="string", example="John Doo"),
      *              @OA\Property(property="contact_informations", type="string", example="json"),
@@ -186,7 +188,7 @@ class LoanController extends ApiController
         $loan->update(array_merge([
             'reminder' => $reminder
         ], $request->only([
-            'box_id', 'type', 'contact', 'contact_informations', 'comment'
+            'box_id', 'box_parent_id', 'type', 'contact', 'contact_informations', 'comment'
         ])));
         return $this->returnSuccess(new LoanResource($loan));
     }
