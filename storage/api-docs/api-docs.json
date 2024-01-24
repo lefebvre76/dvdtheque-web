@@ -904,6 +904,12 @@
                     },
                     "in_collection": {
                         "type": "boolean"
+                    },
+                    "loans": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Loan"
+                        }
                     }
                 },
                 "type": "object"

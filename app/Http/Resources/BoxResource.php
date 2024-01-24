@@ -30,6 +30,7 @@ class BoxResource extends JsonResource
      *      @OA\Property(property="boxes", type="array", @OA\Items(ref="#/components/schemas/LightBox")),
      *      @OA\Property(property="in_wishlist", type="boolean"),
      *      @OA\Property(property="in_collection", type="boolean"),
+     *      @OA\Property(property="loans", type="array", @OA\Items(ref="#/components/schemas/Loan")),
      * )
     */
     public function toArray(Request $request): array
@@ -41,6 +42,7 @@ class BoxResource extends JsonResource
             $in_wishlist = filter_var($box->pivot->wishlist, FILTER_VALIDATE_BOOLEAN);
             $in_collection = !filter_var($box->pivot->wishlist, FILTER_VALIDATE_BOOLEAN);
         }
+        $loans = Auth::user()->loans()->where('box_id', $this->id)->get();
         return [
             'id' => $this->id,
             'type' => $this->type,
@@ -57,7 +59,8 @@ class BoxResource extends JsonResource
             'composers' => CelebrityResource::collection($this->composers),
             'boxes' => LightBoxResource::collection($this->boxes),
             'in_wishlist' => $in_wishlist,
-            'in_collection' => $in_collection
+            'in_collection' => $in_collection,
+            'loans' => LoanResource::collection($loans)
         ];
     }
 }
