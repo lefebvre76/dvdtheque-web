@@ -40,8 +40,10 @@ class BoxResource extends JsonResource
         $box = Auth::user()->boxes()->where('boxes.id', $this->id)->first();
         if ($box) {
             $in_wishlist = filter_var($box->pivot->wishlist, FILTER_VALIDATE_BOOLEAN);
+            $in_collection != $in_wishlist;
+        } else {
+            $in_collection = Auth::user()->movies()->where('boxes.id', $this->id)->exists();
         }
-        $in_collection = Auth::user()->movies()->where('boxes.id', $this->id)->exists();
         $movie = Auth::user()->movies()->where('boxes.id', $this->id)->exists();
         $loans = Auth::user()->loans()->where('box_id', $this->id)->get();
         return [
