@@ -26,10 +26,11 @@ class LoanResource extends JsonResource
     */
     public function toArray(Request $request): array
     {
+
         return [
             'id' => $this->id,
             'box' => new LightBoxResource($this->box),
-            'parent_box' => $this->parent_box ? new LightBoxResource($this->parent_box) : null,
+            'parent_box' => $this->parentBox ? new LightBoxResource($this->parentBox) : null,
             'type' => $this->type,
             'contact' => $this->contact,
             'contact_informations' => $this->contact_informations,
