@@ -66,6 +66,7 @@ class MovieController extends ApiController
                     });
             });
         }
+        $boxes = $boxes->orderBy('boxes.title');
         $boxes = $boxes->paginate(config('app.item_per_page'));
         return LightBoxResource::collection($boxes);
     }
