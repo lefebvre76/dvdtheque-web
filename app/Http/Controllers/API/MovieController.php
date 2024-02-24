@@ -44,6 +44,8 @@ class MovieController extends ApiController
             $boxes->where(function ($query) use ($request) {
                 $query->where('boxes.title', 'LIKE', '%'.$request->search.'%')
                     ->orWhere('boxes.original_title', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere('boxes.editor', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere('boxes.edition', 'LIKE', '%'.$request->search.'%')
                     ->orWhereIn('boxes.id', function ($query) use ($request) {
                         $query
                             ->select('box_celebrity.box_id')
@@ -56,7 +58,7 @@ class MovieController extends ApiController
                         $query
                             ->select('box_kind.box_id')
                             ->from('box_kind')
-                            ->join('kinds', 'kinds.id', '=', 'box_kind.kinds_id')
+                            ->join('kinds', 'kinds.id', '=', 'box_kind.kind_id')
                             ->where('name', 'LIKE', '%'.$request->search.'%')
                         ;
                     });
