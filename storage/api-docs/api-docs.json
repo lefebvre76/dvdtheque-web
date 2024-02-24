@@ -556,6 +556,10 @@
                                         "type": "integer",
                                         "example": "1"
                                     },
+                                    "box_parent_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
                                     "type": {
                                         "type": "string",
                                         "example": "LOAN"
@@ -665,6 +669,10 @@
                             "schema": {
                                 "properties": {
                                     "box_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "box_parent_id": {
                                         "type": "integer",
                                         "example": "1"
                                     },
@@ -967,6 +975,12 @@
                     },
                     "illustration": {
                         "$ref": "#/components/schemas/Illustration"
+                    },
+                    "loaned": {
+                        "type": "Bool"
+                    },
+                    "borrowed": {
+                        "type": "Bool"
                     }
                 },
                 "type": "object"
