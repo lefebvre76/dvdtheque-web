@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Resources\LightBoxResource;
+use App\Http\Resources\MovieResource;
+use App\Models\Box;
 
 class MovieController extends ApiController
 {
@@ -67,4 +69,24 @@ class MovieController extends ApiController
         $boxes = $boxes->paginate(config('app.item_per_page'));
         return LightBoxResource::collection($boxes);
     }
+
+    /**
+     * @OA\Get(
+     *     tags={"Movies"},
+     *     path="/movies/{id}",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(in="path", name="id"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Get movie informations",
+     *         @OA\JsonContent(ref="#/components/schemas/Movie")
+     *     ),
+     *     @OA\Response(response=404, description="Movie not found"),
+     * )
+     */
+    public function show(Box $box)
+    {
+        return $this->returnSuccess(new MovieResource($box));
+    }
+
 }

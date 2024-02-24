@@ -843,6 +843,40 @@
                     }
                 ]
             }
+        },
+        "/movies/{id}": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "operationId": "89f9285704ff3af6c4862163a66c3d2d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get movie informations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Movie"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Movie not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -1011,6 +1045,75 @@
                     },
                     "comment": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Movie": {
+                "title": "Movie",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "original_title": {
+                        "type": "string"
+                    },
+                    "year": {
+                        "type": "integer"
+                    },
+                    "synopsis": {
+                        "type": "string"
+                    },
+                    "edition": {
+                        "type": "string"
+                    },
+                    "editor": {
+                        "type": "string"
+                    },
+                    "illustration": {
+                        "$ref": "#/components/schemas/Illustration"
+                    },
+                    "kinds": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Kind"
+                        }
+                    },
+                    "directors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Celebrity"
+                        }
+                    },
+                    "actors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Celebrity"
+                        }
+                    },
+                    "composers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Celebrity"
+                        }
+                    },
+                    "parent_boxes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LightBox"
+                        }
+                    },
+                    "loans": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Loan"
+                        }
                     }
                 },
                 "type": "object"
